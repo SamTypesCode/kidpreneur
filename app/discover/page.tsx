@@ -10,14 +10,13 @@ export default function DiscoverPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Debounce the query
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
-      setPage(1); // reset to first page on new search
-    }, 500); // 500ms delay
+      setPage(1);
+    }, 500);
 
-    return () => clearTimeout(timer); // cleanup if query changes
+    return () => clearTimeout(timer);
   }, [query]);
 
   const fetchIdeas = async () => {
@@ -50,7 +49,6 @@ export default function DiscoverPage() {
     }
   };
 
-  // Fetch whenever debounced query, sort, or page changes
   useEffect(() => {
     fetchIdeas();
   }, [debouncedQuery, sortBy, page]);

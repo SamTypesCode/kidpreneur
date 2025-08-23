@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newLike, { status: 201 });
   } catch (err) {
-    // We are now safely checking the type of 'err'
     if (err instanceof PrismaClientKnownRequestError && err.code === "P2002") {
       return NextResponse.json(
         { error: "User has already liked this idea" },
@@ -37,7 +36,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Handle other errors
     console.error("Error adding like:", err);
     return NextResponse.json({ error: "Failed to add like" }, { status: 500 });
   }

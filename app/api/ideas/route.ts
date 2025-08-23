@@ -7,18 +7,14 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    // Pagination and Limit
     const limit = parseInt(searchParams.get("limit") || "10", 10);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const skip = (page - 1) * limit;
 
-    // Search query
     const query = searchParams.get("q");
 
-    // Optional filter by user
-    const userId = searchParams.get("userId"); // NEW: pass userId in query params
+    const userId = searchParams.get("userId");
 
-    // Sorting
     const sortByDate = searchParams.get("sortByDate");
     const sortByLikes = searchParams.get("sortByLikes");
     const sortByComments = searchParams.get("sortByComments");
@@ -26,7 +22,6 @@ export async function GET(req: NextRequest) {
     let orderBy = {};
     let where: any = {};
 
-    // Apply search filter
     if (query) {
       where.OR = [
         { title: { contains: query, mode: "insensitive" } },
@@ -35,9 +30,8 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    // Apply user filter
     if (userId) {
-      where.userId = userId; // only fetch ideas by this user
+      where.userId = userId;
     }
 
     // Apply sorting
@@ -57,7 +51,6 @@ export async function GET(req: NextRequest) {
       orderBy = { createdAt: "desc" };
     }
 
-    // Fetch ideas
     const ideas = await prisma.idea.findMany({
       where,
       orderBy,
@@ -91,7 +84,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth(); // Use auth() to get the session
+    const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

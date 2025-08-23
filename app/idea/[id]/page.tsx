@@ -1,4 +1,3 @@
-// app/idea/[id]/page.tsx
 import { prisma } from "@/lib/prisma";
 
 interface IdeaPageProps {
