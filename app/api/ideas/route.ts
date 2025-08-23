@@ -15,23 +15,29 @@ export async function GET(req: NextRequest) {
     // Search query
     const query = searchParams.get("q");
 
+    // Optional filter by user
+    const userId = searchParams.get("userId"); // NEW: pass userId in query params
+
     // Sorting
     const sortByDate = searchParams.get("sortByDate");
     const sortByLikes = searchParams.get("sortByLikes");
     const sortByComments = searchParams.get("sortByComments");
 
     let orderBy = {};
-    let where = {};
+    let where: any = {};
 
     // Apply search filter
     if (query) {
-      where = {
-        OR: [
-          { title: { contains: query, mode: "insensitive" } },
-          { description: { contains: query, mode: "insensitive" } },
-          { problem: { contains: query, mode: "insensitive" } },
-        ],
-      };
+      where.OR = [
+        { title: { contains: query, mode: "insensitive" } },
+        { description: { contains: query, mode: "insensitive" } },
+        { problem: { contains: query, mode: "insensitive" } },
+      ];
+    }
+
+    // Apply user filter
+    if (userId) {
+      where.userId = userId; // only fetch ideas by this user
     }
 
     // Apply sorting
@@ -51,34 +57,26 @@ export async function GET(req: NextRequest) {
       orderBy = { createdAt: "desc" };
     }
 
-    // Fetch ideas from the database with pagination, sorting, and filtering
+    // Fetch ideas
     const ideas = await prisma.idea.findMany({
       where,
       orderBy,
       skip,
       take: limit,
       include: {
-        user: {
-          select: { id: true, name: true, email: true, image: true },
-        },
+        user: { select: { id: true, name: true, email: true, image: true } },
         comments: true,
         likes: true,
       },
     });
 
-    // Also get the total count for pagination metadata
     const totalIdeas = await prisma.idea.count({ where });
     const totalPages = Math.ceil(totalIdeas / limit);
 
     return NextResponse.json(
       {
         data: ideas,
-        meta: {
-          total: totalIdeas,
-          page: page,
-          limit: limit,
-          totalPages: totalPages,
-        },
+        meta: { total: totalIdeas, page, limit, totalPages },
       },
       { status: 200 }
     );
