@@ -6,6 +6,7 @@ export default function PostForm() {
   const [title, setTitle] = useState("");
   const [problem, setProblem] = useState("");
   const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -14,7 +15,7 @@ export default function PostForm() {
     const res = await fetch("/api/ideas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, problem, description }),
+      body: JSON.stringify({ title, problem, description, imageUrl }),
     });
 
     if (res.ok) {
@@ -46,6 +47,13 @@ export default function PostForm() {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Image URL:</label>
+          <input
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
           />
         </div>
         <button type="submit">Post</button>

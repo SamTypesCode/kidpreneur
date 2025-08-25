@@ -20,6 +20,8 @@ export default async function IdeaPage({ params }: IdeaPageProps) {
 
   return (
     <div>
+      <img src={idea.imageUrl ?? undefined} alt="idea cover image" />
+
       <h1>{idea.title}</h1>
       <p>{idea.problem}</p>
       <p>{idea.description}</p>

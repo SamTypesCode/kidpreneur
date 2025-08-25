@@ -73,7 +73,7 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-    ideas    Idea[]     // all ideas posted by the user
+  ideas    Idea[]     // all ideas posted by the user
   comments Comment[]  // all comments posted by the user
   likes    Like[]     // all likes made by the user
  
@@ -86,6 +86,7 @@ model Idea {
   title       String
   problem     String
   description String
+  imageUrl    String?
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments    Comment[] 
