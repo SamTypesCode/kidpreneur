@@ -1,7 +1,6 @@
-// app/api/ideas/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth"; // Importing the auth function
+import { auth } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
   try {

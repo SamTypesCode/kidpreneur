@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export async function POST(req: NextRequest) {
   try {
@@ -28,15 +27,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(newLike, { status: 201 });
-  } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError && err.code === "P2002") {
-      return NextResponse.json(
-        { error: "User has already liked this idea" },
-        { status: 409 }
-      );
-    }
-
-    console.error("Error adding like:", err);
-    return NextResponse.json({ error: "Failed to add like" }, { status: 500 });
+  } catch (err: any) {
+    console.error("Error toggling like:", err);
+    return NextResponse.json(
+      { error: "Failed to toggle like" },
+      { status: 500 }
+    );
   }
 }

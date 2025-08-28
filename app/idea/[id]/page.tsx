@@ -1,3 +1,4 @@
+import type { Comment as PrismaComment } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 interface IdeaPageProps {
@@ -30,7 +31,7 @@ export default async function IdeaPage({ params }: IdeaPageProps) {
       <p>{idea.user.name}</p>
 
       <h3>Comments ({idea.comments.length}):</h3>
-      {idea.comments.map((c) => (
+      {idea.comments.map((c: PrismaComment) => (
         <p key={c.id}>{c.content}</p>
       ))}
 

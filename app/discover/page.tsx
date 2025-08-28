@@ -79,16 +79,18 @@ export default function DiscoverPage() {
 
       <div>
         {ideas.map((idea) => (
-          <div key={idea.id}>
-            <img src={idea.imageUrl ?? undefined} alt="idea cover image" />
-            <h2>{idea.title}</h2>
-            <p>{idea.problem}</p>
-            <p>{idea.description}</p>
-            <p>Author: {idea.user.name}</p>
-            <p>Comments: {idea.comments.length}</p>
-            <p>Likes: {idea.likes.length}</p>
-            <hr />
-          </div>
+          <a key={idea.id} href={`/idea/${idea.id}`}>
+            <div>
+              <img src={idea.imageUrl ?? undefined} alt="idea cover image" />
+              <h2>{idea.title}</h2>
+              <p>{idea.problem}</p>
+              <p>{idea.description}</p>
+              <p>Author: {idea.user.name}</p>
+              <p>Comments: {idea.comments.length}</p>
+              <p>Likes: {idea.likes.length}</p>
+              <hr />
+            </div>
+          </a>
         ))}
       </div>
 

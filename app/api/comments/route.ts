@@ -1,7 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,13 +28,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(newComment, { status: 201 });
-  } catch (err) {
-    if (err instanceof PrismaClientKnownRequestError) {
-      if (err.code === "P2003") {
-        return NextResponse.json({ error: "Idea not found" }, { status: 404 });
-      }
-
-      return NextResponse.json({ error: err.message }, { status: 400 });
+  } catch (err: any) {
+    if (err.code === "P2003") {
+      return NextResponse.json({ error: "Idea not found" }, { status: 404 });
     }
 
     console.error("Error adding comment:", err);
